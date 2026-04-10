@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBTI人格测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .intro {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+        
+        .start-btn {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.3em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+        
+        .start-btn:hover {
+            background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+        
+        .start-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
+        }
+        
+        .test-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .progress {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #4CAF50;
+            transition: width 0.5s ease;
+        }
+        
+        .question {
+            margin-bottom: 30px;
+        }
+        
+        .question h3 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option:hover {
+            border-color: #4CAF50;
+            background-color: #f0f9ff;
+        }
+        
+        .option.selected {
+            border-color: #4CAF50;
+            background-color: #e8f5e8;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        
+        .prev-btn {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        .next-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .result-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 40px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        .result-header {
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .result-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .personality-main-type {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        .personality-type {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #4CAF50;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .match-percentage {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #666;
+            background-color: #e8f5e8;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+        
+        .dimension-hit {
+            font-size: 1em;
+            margin-bottom: 20px;
+            color: #666;
+        }
+        
+        .personality-image {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .personality-description {
+            text-align: left;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .友情提示 {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: #856404;
+            text-align: left;
+        }
+        
+        .作者的话 {
+            background-color: #e7f3ff;
+            border: 1px solid #b8daff;
+            border-radius: 10px;
+            padding: 20px;
+            color: #0c5460;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+        
+        .personality-details {
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: left;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .personality-details h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .dimensions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .dimension-item {
+            background-color: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .dimension-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .dimension-info {
+            flex: 1;
+        }
+        
+        .dimension-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .dimension-desc {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .dimension-score {
+            font-weight: bold;
+            color: #4CAF50;
+            font-size: 1.1em;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .test-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header id="intro">
+            <h1>SBTI人格测试</h1>
+            <p class="intro">探索你的真实人格，发现独特的自己。</p>
+            <p class="intro">通过科学的测试方法，了解你的行为模式和性格特点。</p>
+            <button class="start-btn" onclick="startTest()">开始测试</button>
+        </header>
+        
+        <div class="test-container hidden" id="test">
+            <div class="progress">
+                <p>问题 <span id="current-question">1</span> / 15</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 6.67%;"></div>
+                </div>
+            </div>
+            
+            <div class="question" id="question-container">
+                <h3 id="question-text">当面对一个重要决策时，你通常会：</h3>
+                <div class="options" id="options-container">
+                    <div class="option" onclick="selectOption(this, 'A')">A. 迅速做出决定并主导执行，相信自己的判断</div>
+                    <div class="option" onclick="selectOption(this, 'B')">B. 考虑各种可能性，反复权衡后再做决定</div>
+                    <div class="option" onclick="selectOption(this, 'C')">C. 询问他人的意见，倾向于跟随多数人的选择</div>
+                    <div class="option" onclick="selectOption(this, 'D')">D. 拖延决策，希望问题自行解决</div>
+                    <div class="option" onclick="selectOption(this, 'E')">E. 完全无所谓，随便怎样都可以</div>
+                </div>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn" onclick="prevQuestion()" disabled>上一题</button>
+                <button class="nav-btn next-btn" onclick="nextQuestion()">下一题</button>
+            </div>
+        </div>
+        
+        <div class="result-container hidden" id="result">
+            <div class="result-header">
+                <h2 class="result-title">测试结果</h2>
+                <p class="personality-type" id="result-type">BOSS（领导者）</p>
+                <p class="match-percentage" id="result-percentage">匹配度 92%</p>
+                <img src="SBTI/BOSS.png" alt="BOSS" class="personality-image" id="result-image">
+            </div>
+            
+            <div class="personality-description" id="result-description">
+                <h3>该人格的详细解读</h3>
+                <p>天生掌权者，气场拉满，爱决策、爱掌控，朋友里的主心骨</p>
+            </div>
+            
+            <div class="personality-details" id="result-details">
+                <h3>十五维度评分</h3>
+                <div class="dimensions" id="dimensions-container">
+                    <!-- 维度评分将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <div class="友情提示">
+                <h3>友情提示</h3>
+                <p>本测试仅供娱乐，别拿它当诊断、面试、相亲、分手、招魂、算命或人生判决书。</p>
+            </div>
+            
+            <div class="作者的话">
+                <h3>作者的话</h3>
+                <p>本测试基于SBTI人格测试，旨在提供有趣的人格分析。测试结果仅供参考，希望大家能从中获得一些乐趣和自我认知。</p>
+            </div>
+            
+            <div style="display: flex; gap: 20px; justify-content: center; margin-top: 30px;">
+                <button class="start-btn" onclick="restartTest()">重新测试</button>
+                <button class="start-btn" onclick="backToHome()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">回到首页</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 测试问题（50道）
+        const allQuestions = [
+            {
+                text: "当面对一个重要决策时，你通常会：",
+                options: [
+                    "A. 迅速做出决定并主导执行，相信自己的判断",
+                    "B. 考虑各种可能性，反复权衡后再做决定",
+                    "C. 询问他人的意见，倾向于跟随多数人的选择",
+                    "D. 拖延决策，希望问题自行解决",
+                    "E. 完全无所谓，随便怎样都可以"
+                ]
+            },
+            {
+                text: "当朋友遇到困难时，你会：",
+                options: [
+                    "A. 主动提供具体解决方案，带领他们走出困境",
+                    "B. 耐心倾听，给予情感支持和鼓励",
+                    "C. 表面关心，实际并不真正在意",
+                    "D. 觉得麻烦，尽量避开这类情况",
+                    "E. 倾尽所有帮助他们，即使自己受损"
+                ]
+            },
+            {
+                text: "当你感到压力或情绪低落时，你会：",
+                options: [
+                    "A. 自我否定，认为是自己不够好",
+                    "B. 通过行动释放压力，比如运动或工作",
+                    "C. 用酒精或其他方式麻痹自己",
+                    "D. 对周围的人和事发牢骚，吐槽解压",
+                    "E. 平静接受，认为一切都会过去"
+                ]
+            },
+            {
+                text: "在社交场合中，你通常是：",
+                options: [
+                    "A. 全场焦点，自信展现魅力",
+                    "B. 默默观察，很少主动发言",
+                    "C. 热情活跃，带动气氛",
+                    "D. 当面迎合，背后可能说坏话",
+                    "E. 能躲则躲，尽量减少社交"
+                ]
+            },
+            {
+                text: "对于生活中的挑战和困难，你会：",
+                options: [
+                    "A. 逆来顺受，默默承受",
+                    "B. 积极应对，寻找解决办法",
+                    "C. 抱怨命运不公，觉得自己倒霉",
+                    "D. 直接摆烂，放弃努力",
+                    "E. 寻求他人帮助，依赖别人解决"
+                ]
+            },
+            {
+                text: "当别人对你好时，你会：",
+                options: [
+                    "A. 感恩戴德，加倍回报",
+                    "B. 认为理所当然，不太在意",
+                    "C. 怀疑对方的动机，保持警惕",
+                    "D. 感到压力，担心无法回报",
+                    "E. 无所谓，随便对方怎样"
+                ]
+            },
+            {
+                text: "你的生活态度更倾向于：",
+                options: [
+                    "A. 追求简单快乐，拒绝内卷",
+                    "B. 设定目标，努力实现",
+                    "C. 随遇而安，没有明确计划",
+                    "D. 自我批判，永远觉得不够好",
+                    "E. 享受当下，及时行乐"
+                ]
+            },
+            {
+                text: "在人际关系中，你更注重：",
+                options: [
+                    "A. 掌控对方，主导关系发展",
+                    "B. 付出关爱，照顾他人需求",
+                    "C. 保持独立，避免过度依赖",
+                    "D. 避免冲突，讨好他人",
+                    "E. 频繁更换关系，追求新鲜感"
+                ]
+            },
+            {
+                text: "当你遇到不顺心的事情时，你会：",
+                options: [
+                    "A. 情绪立刻爆发，毫不掩饰",
+                    "B. 压抑情绪，独自消化",
+                    "C. 转移注意力，寻找快乐",
+                    "D. 自我攻击，认为是自己的错",
+                    "E. 逃避问题，假装没发生"
+                ]
+            },
+            {
+                text: "你的消费观念是：",
+                options: [
+                    "A. 为他人花钱大手大脚，自己节省",
+                    "B. 精打细算，注重性价比",
+                    "C. 及时行乐，有钱就花",
+                    "D. 无所谓，随便花",
+                    "E. 尽量不花，保持极简"
+                ]
+            },
+            {
+                text: "当你需要学习新技能时，你会：",
+                options: [
+                    "A. 制定详细计划，系统学习",
+                    "B. 直接实践，从错误中学习",
+                    "C. 寻找捷径，快速掌握",
+                    "D. 觉得麻烦，尽量避免",
+                    "E. 随便学学，能应付就行"
+                ]
+            },
+            {
+                text: "当你与他人意见不合时，你会：",
+                options: [
+                    "A. 坚持自己的观点，说服对方",
+                    "B. 尊重对方意见，寻找共同点",
+                    "C. 表面同意，内心保留",
+                    "D. 直接争吵，争个输赢",
+                    "E. 回避讨论，保持沉默"
+                ]
+            },
+            {
+                text: "你的时间管理方式更倾向于：",
+                options: [
+                    "A. 严格规划，按计划执行",
+                    "B. 灵活安排，随机应变",
+                    "C. 拖延到最后，临时抱佛脚",
+                    "D. 完全没有计划，随波逐流",
+                    "E. 只做重要的事，其他不管"
+                ]
+            },
+            {
+                text: "当你取得成就时，你会：",
+                options: [
+                    "A. 感到自豪，主动分享",
+                    "B. 保持低调，继续努力",
+                    "C. 觉得理所当然，不足为奇",
+                    "D. 担心下次失败，感到压力",
+                    "E. 无所谓，没什么特别的"
+                ]
+            },
+            {
+                text: "对于未来，你更倾向于：",
+                options: [
+                    "A. 详细规划，设定明确目标",
+                    "B. 保持开放，随遇而安",
+                    "C. 担心焦虑，害怕变化",
+                    "D. 不抱期望，过一天算一天",
+                    "E. 充满期待，积极探索"
+                ]
+            },
+            {
+                text: "当你在团队中工作时，你更倾向于：",
+                options: [
+                    "A. 担任领导角色，指挥他人",
+                    "B. 默默工作，完成自己的任务",
+                    "C. 活跃沟通，协调团队关系",
+                    "D. 敷衍了事，能混则混",
+                    "E. 无所谓，随便分配什么角色"
+                ]
+            },
+            {
+                text: "当你面对批评时，你会：",
+                options: [
+                    "A. 虚心接受，努力改进",
+                    "B. 分析批评的合理性，有则改之",
+                    "C. 感到委屈，为自己辩解",
+                    "D. 完全否定，认为对方在针对自己",
+                    "E. 无所谓，左耳进右耳出"
+                ]
+            },
+            {
+                text: "你的兴趣爱好更倾向于：",
+                options: [
+                    "A. 挑战性活动，如极限运动",
+                    "B. 知识性活动，如阅读学习",
+                    "C. 社交性活动，如聚会聊天",
+                    "D. 娱乐性活动，如看剧打游戏",
+                    "E. 随意性活动，想到什么做什么"
+                ]
+            },
+            {
+                text: "当你需要帮助时，你会：",
+                options: [
+                    "A. 尽量自己解决，不麻烦别人",
+                    "B. 分析问题，有针对性地寻求帮助",
+                    "C. 向多个朋友求助，比较解决方案",
+                    "D. 希望别人主动发现并帮助自己",
+                    "E. 无所谓，有没有帮助都可以"
+                ]
+            },
+            {
+                text: "你的睡眠习惯更倾向于：",
+                options: [
+                    "A. 严格作息，按时睡觉起床",
+                    "B. 规律作息，但偶尔熬夜",
+                    "C. 经常熬夜，白天补觉",
+                    "D. 完全没有规律，想睡就睡",
+                    "E. 无所谓，怎么舒服怎么来"
+                ]
+            },
+            {
+                text: "当你旅行时，你更喜欢：",
+                options: [
+                    "A. 制定详细行程，按计划执行",
+                    "B. 大致规划，灵活调整",
+                    "C. 随心而行，走到哪算哪",
+                    "D. 宅在酒店，不想出门",
+                    "E. 无所谓，别人安排就好"
+                ]
+            },
+            {
+                text: "你的学习方式更倾向于：",
+                options: [
+                    "A. 主动探索，实践中学习",
+                    "B. 系统学习，理论结合实践",
+                    "C. 向他人学习，借鉴经验",
+                    "D. 被动学习，应付考试",
+                    "E. 无所谓，怎么学都行"
+                ]
+            },
+            {
+                text: "当你面对陌生人时，你会：",
+                options: [
+                    "A. 主动搭话，快速建立联系",
+                    "B. 保持礼貌，适当交流",
+                    "C. 观察对方，再决定是否交流",
+                    "D. 尽量避免交流，保持距离",
+                    "E. 无所谓，看对方态度"
+                ]
+            },
+            {
+                text: "你的工作态度更倾向于：",
+                options: [
+                    "A. 追求完美，精益求精",
+                    "B. 认真负责，按时完成",
+                    "C. 高效快捷，注重结果",
+                    "D. 敷衍了事，能交差就行",
+                    "E. 无所谓，看心情"
+                ]
+            },
+            {
+                text: "当你遇到挫折时，你会：",
+                options: [
+                    "A. 分析原因，总结经验",
+                    "B. 调整心态，继续努力",
+                    "C. 抱怨命运，感到沮丧",
+                    "D. 放弃努力，不再尝试",
+                    "E. 无所谓，反正都会过去"
+                ]
+            },
+            {
+                text: "你的沟通风格更倾向于：",
+                options: [
+                    "A. 直接坦率，直抒胸臆",
+                    "B. 理性客观，逻辑清晰",
+                    "C. 情感丰富，注重感受",
+                    "D. 含糊其辞，避免冲突",
+                    "E. 无所谓，想到什么说什么"
+                ]
+            },
+            {
+                text: "当你看到别人成功时，你会：",
+                options: [
+                    "A. 感到羡慕，努力追赶",
+                    "B. 分析对方的成功经验",
+                    "C. 为对方高兴，真诚祝贺",
+                    "D. 感到嫉妒，贬低对方",
+                    "E. 无所谓，与我无关"
+                ]
+            },
+            {
+                text: "你的生活环境更倾向于：",
+                options: [
+                    "A. 整洁有序，井井有条",
+                    "B. 舒适实用，略有杂乱",
+                    "C. 个性化强，充满创意",
+                    "D. 混乱不堪，懒得整理",
+                    "E. 无所谓，能住就行"
+                ]
+            },
+            {
+                text: "当你需要做选择时，你更看重：",
+                options: [
+                    "A. 个人喜好，跟随内心",
+                    "B. 理性分析，权衡利弊",
+                    "C. 他人意见，考虑影响",
+                    "D. 短期利益，即时满足",
+                    "E. 无所谓，随便选"
+                ]
+            },
+            {
+                text: "你的休闲方式更倾向于：",
+                options: [
+                    "A. 积极活动，如运动健身",
+                    "B. 安静放松，如阅读冥想",
+                    "C. 社交娱乐，如聚会K歌",
+                    "D. 宅家休息，如看剧打游戏",
+                    "E. 无所谓，看当时心情"
+                ]
+            },
+            {
+                text: "当你与他人发生冲突时，你会：",
+                options: [
+                    "A. 主动沟通，解决问题",
+                    "B. 冷静分析，寻找解决方案",
+                    "C. 避免冲突，妥协让步",
+                    "D. 坚持己见，不愿妥协",
+                    "E. 无所谓，随便怎样"
+                ]
+            },
+            {
+                text: "你的思维方式更倾向于：",
+                options: [
+                    "A. 创新思维，喜欢尝试新事物",
+                    "B. 逻辑思维，注重理性分析",
+                    "C. 感性思维，注重情感体验",
+                    "D. 线性思维，按部就班",
+                    "E. 无所谓，怎么想都行"
+                ]
+            },
+            {
+                text: "当你接到一个新任务时，你会：",
+                options: [
+                    "A. 立即行动，快速完成",
+                    "B. 制定计划，有序执行",
+                    "C. 寻求指导，明确要求",
+                    "D. 拖延到最后，临时应付",
+                    "E. 无所谓，反正都会完成"
+                ]
+            },
+            {
+                text: "你的社交圈大小更倾向于：",
+                options: [
+                    "A. 广泛社交，朋友众多",
+                    "B. 精选好友，深度交往",
+                    "C. 保持适度，有几个知心朋友",
+                    "D. 社交圈小，喜欢独处",
+                    "E. 无所谓，顺其自然"
+                ]
+            },
+            {
+                text: "当你面对变化时，你会：",
+                options: [
+                    "A. 积极适应，拥抱变化",
+                    "B. 谨慎应对，逐步调整",
+                    "C. 感到不安，需要时间适应",
+                    "D. 拒绝变化，坚持现状",
+                    "E. 无所谓，怎么变都行"
+                ]
+            },
+            {
+                text: "你的表达方式更倾向于：",
+                options: [
+                    "A. 直接表达，不绕弯子",
+                    "B. 委婉表达，顾及他人感受",
+                    "C. 幽默表达，轻松氛围",
+                    "D. 沉默寡言，很少表达",
+                    "E. 无所谓，看场合"
+                ]
+            },
+            {
+                text: "当你需要做决定时，你更依赖：",
+                options: [
+                    "A. 直觉判断，相信第一感觉",
+                    "B. 理性分析，权衡利弊",
+                    "C. 他人建议，参考意见",
+                    "D. 过去经验，遵循惯例",
+                    "E. 无所谓，随便决定"
+                ]
+            },
+            {
+                text: "你的生活节奏更倾向于：",
+                options: [
+                    "A. 快节奏，充满活力",
+                    "B. 中等节奏，张弛有度",
+                    "C. 慢节奏，享受生活",
+                    "D. 无节奏，随心所欲",
+                    "E. 无所谓，看情况"
+                ]
+            },
+            {
+                text: "当你看到不公平的事情时，你会：",
+                options: [
+                    "A. 挺身而出，主持公道",
+                    "B. 理性分析，寻求解决方案",
+                    "C. 感到愤怒，但无能为力",
+                    "D. 视而不见，多一事不如少一事",
+                    "E. 无所谓，与我无关"
+                ]
+            },
+            {
+                text: "你的自我认知更倾向于：",
+                options: [
+                    "A. 自信满满，相信自己的能力",
+                    "B. 客观理性，清楚自己的优缺点",
+                    "C. 自我怀疑，经常否定自己",
+                    "D. 模糊不清，不太了解自己",
+                    "E. 无所谓，反正都是我"
+                ]
+            },
+            {
+                text: "当你与他人合作时，你更倾向于：",
+                options: [
+                    "A. 主导合作，分配任务",
+                    "B. 积极参与，贡献想法",
+                    "C. 配合他人，完成分配的任务",
+                    "D. 敷衍了事，能躲则躲",
+                    "E. 无所谓，怎么都行"
+                ]
+            },
+            {
+                text: "你的情绪管理方式更倾向于：",
+                options: [
+                    "A. 情绪外放，直接表达",
+                    "B. 情绪内收，自我调节",
+                    "C. 情绪转移，通过其他方式释放",
+                    "D. 情绪压抑，积累到爆发",
+                    "E. 无所谓，情绪来了就来了"
+                ]
+            },
+            {
+                text: "当你设定目标时，你更倾向于：",
+                options: [
+                    "A. 设定高目标，挑战自我",
+                    "B. 设定合理目标，循序渐进",
+                    "C. 不设定目标，随遇而安",
+                    "D. 设定低目标，轻松完成",
+                    "E. 无所谓，有没有目标都行"
+                ]
+            },
+            {
+                text: "你的穿着风格更倾向于：",
+                options: [
+                    "A. 时尚潮流，引领风格",
+                    "B. 整洁大方，符合场合",
+                    "C. 舒适休闲，随意自在",
+                    "D. 邋里邋遢，不太在意",
+                    "E. 无所谓，有什么穿什么"
+                ]
+            },
+            {
+                text: "当你需要反馈时，你更希望得到：",
+                options: [
+                    "A. 直接坦率的反馈，不管好坏",
+                    "B. 建设性的反馈，有改进建议",
+                    "C. 肯定和鼓励的反馈",
+                    "D. 不希望得到反馈，怕被批评",
+                    "E. 无所谓，反馈什么都行"
+                ]
+            },
+            {
+                text: "你的兴趣广度更倾向于：",
+                options: [
+                    "A. 广泛涉猎，什么都感兴趣",
+                    "B. 深度挖掘，专注几个领域",
+                    "C. 随波逐流，跟随流行趋势",
+                    "D. 兴趣狭窄，只关注少数事物",
+                    "E. 无所谓，没什么特别兴趣"
+                ]
+            },
+            {
+                text: "当你面对权威时，你会：",
+                options: [
+                    "A. 挑战权威，提出自己的观点",
+                    "B. 尊重权威，理性沟通",
+                    "C. 服从权威，避免冲突",
+                    "D. 蔑视权威，我行我素",
+                    "E. 无所谓，看情况"
+                ]
+            },
+            {
+                text: "你的生活态度更倾向于：",
+                options: [
+                    "A. 积极乐观，充满希望",
+                    "B. 理性现实，面对事实",
+                    "C. 悲观消极，担忧未来",
+                    "D. 麻木不仁，得过且过",
+                    "E. 无所谓，怎么过都行"
+                ]
+            }
+        ];
+        
+        // 随机抽取15道题
+        function getRandomQuestions() {
+            const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 15);
+        }
+        
+        // 当前测试使用的问题
+        let questions = [];
+        
+        // 人格类型信息
+        const personalityTypes = [
+            { code: "IMSB", name: "自我攻击者", description: "极致内耗，习惯性自我否定、自我PUA，永远在自我攻击" },
+            { code: "BOSS", name: "领导者", description: "天生掌权者，气场拉满，爱决策、爱掌控，朋友里的主心骨" },
+            { code: "MUM", name: "妈妈", description: "爱操心的付出型人格，朋友里的老妈子，管吃管喝管情绪" },
+            { code: "FAKE", name: "伪人", description: "双面变色龙，当面一套背后一套，擅长伪装、见人说人话" },
+            { code: "DEAD", name: "死者", description: "精神已死，肉体苟活，对一切提不起兴趣，只想躺平" },
+            { code: "ZZZ", name: "装死者", description: "用装死逃避一切，遇事就躲、就拖，主打眼不见心不烦" },
+            { code: "GOGO", name: "行者", description: "超强行动派，想到就做，绝不内耗，永远在前进" },
+            { code: "FUCK", name: "草者", description: "野草精神，逆来顺受，生命力顽强，骂我我不听" },
+            { code: "CTRL", name: "拿捏者", description: "掌控欲爆棚，擅长拿捏人心，社交场上的操盘手" },
+            { code: "HHHH", name: "傻乐者", description: "没心没肺，快乐至上，天塌下来都能笑出声" },
+            { code: "SEXY", name: "尤物", description: "性感自信，魅力拉满，社交焦点，男女通杀" },
+            { code: "OJBK", name: "无所谓人", description: "极致随缘，没脾气没主见，永远\"随便、都行\"" },
+            { code: "POOR", name: "贫穷者", description: "钱包空空，精神富有，主打穷开心，永远在吃土" },
+            { code: "OHNO", name: "哦不人", description: "自带倒霉buff，干啥啥翻车，遇事第一反应\"完了\"" },
+            { code: "MONK", name: "僧人", description: "四大皆空，无欲无求，看破红尘，佛系人生" },
+            { code: "SHIT", name: "狗屎人", description: "愤世嫉俗，爱吐槽抬杠，嘴硬心软，骂骂咧咧活着" },
+            { code: "THANK", name: "感恩者", description: "讨好型人格，别人对自己好一点就感恩戴德" },
+            { code: "MALO", name: "吗喽", description: "彻底躺平，拒绝内卷，只追求吃睡摸鱼的简单快乐" },
+            { code: "ATMER", name: "送钱者", description: "人形提款机，只出不进，不懂拒绝，总在吃亏" },
+            { code: "THINK", name: "思考者", description: "想太多内耗王者，敏感多疑，一件事能复盘八百遍" },
+            { code: "SOLO", name: "孤儿", description: "独来独往，莫挨老子，用冷漠保护自己，习惯独处" },
+            { code: "LOVER", name: "多情者", description: "恋爱脑，见一个爱一个，永远在心动、在上头" },
+            { code: "WOC", name: "握草人", description: "情绪写在脸上，一点小事就炸毛，口头禅\"握草\"" },
+            { code: "DRUNK", name: "酒鬼", description: "无酒不欢，用酒精释放情绪，今朝有酒今朝醉" },
+            { code: "IMFW", name: "废物", description: "极致摆烂，自暴自弃，破罐子破摔，自嘲\"废物\"" }
+        ];
+        
+        // 全局变量
+        let currentQuestion = 0;
+        let answers = [];
+        
+        // 开始测试
+        function startTest() {
+            // 随机抽取15道题
+            questions = getRandomQuestions();
+            // 初始化答案数组
+            answers = new Array(questions.length).fill('');
+            // 重置当前问题索引
+            currentQuestion = 0;
+            
+            document.getElementById('intro').classList.add('hidden');
+            document.getElementById('test').classList.remove('hidden');
+            loadQuestion();
+        }
+        
+        // 加载问题
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('question-text').textContent = question.text;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            // 随机打乱选项顺序
+            const shuffledOptions = [...question.options].sort(() => 0.5 - Math.random());
+            
+            shuffledOptions.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(optionDiv, option.charAt(0));
+                
+                if (answers[currentQuestion] === option.charAt(0)) {
+                    optionDiv.classList.add('selected');
+                }
+                
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // 更新进度条
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            
+            // 更新导航按钮状态
+            document.querySelector('.prev-btn').disabled = currentQuestion === 0;
+            document.querySelector('.next-btn').textContent = currentQuestion === questions.length - 1 ? '提交' : '下一题';
+        }
+        
+        // 选择选项
+        function selectOption(optionElement, option) {
+            // 移除所有选项的选中状态
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            // 添加当前选项的选中状态
+            optionElement.classList.add('selected');
+            // 保存答案
+            answers[currentQuestion] = option;
+            
+            // 自动跳转到下一题
+            setTimeout(() => {
+                nextQuestion();
+            }, 500); // 延迟500毫秒，让用户看到选择效果
+        }
+        
+        // 上一题
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+        
+        // 下一题
+        function nextQuestion() {
+            // 检查是否选择了选项
+            if (!answers[currentQuestion]) {
+                alert('请选择一个选项');
+                return;
+            }
+            
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                // 提交测试
+                calculateResult();
+            }
+        }
+        
+        // 详细的人格解读
+        const detailedDescriptions = {
+            "IMSB": "你是一个极致内耗的人，习惯性自我否定、自我PUA，永远在自我攻击。你总是对自己要求过高，即使做得很好也会找到自己的不足。这种自我批判的倾向让你经常陷入负面情绪中，难以真正享受成功的喜悦。",
+            "BOSS": "你是天生的掌权者，气场拉满，爱决策、爱掌控，是朋友里的主心骨。你自信果断，善于带领团队前进，面对困难时能够迅速做出决定并付诸行动。你的领导能力和责任感让你在人群中脱颖而出。",
+            "MUM": "你是爱操心的付出型人格，朋友里的老妈子，管吃管喝管情绪。你总是把别人的需求放在第一位，愿意为了他人的幸福牺牲自己的利益。你的温暖和关怀让你成为朋友中最可靠的存在。",
+            "FAKE": "你是双面变色龙，当面一套背后一套，擅长伪装、见人说人话。你善于适应不同的社交场合，能够根据环境调整自己的行为和言语。这种灵活的社交能力让你在人际关系中如鱼得水，但也可能让别人觉得你不够真诚。",
+            "DEAD": "你是精神已死，肉体苟活，对一切提不起兴趣，只想躺平。你对生活缺乏热情，觉得一切都没有意义，宁愿宅在家里也不愿意参与社交活动。这种消极的生活态度可能会让你错过很多美好的体验。",
+            "ZZZ": "你是用装死逃避一切，遇事就躲、就拖，主打眼不见心不烦。你害怕面对困难和冲突，总是采取拖延战术，希望问题能够自行解决。这种逃避的态度可能会让问题变得更加复杂。",
+            "GOGO": "你是超强行动派，想到就做，绝不内耗，永远在前进。你充满活力和动力，对生活充满热情，总是积极寻找新的挑战。你的行动力和决心让你能够实现自己的目标。",
+            "FUCK": "你是野草精神，逆来顺受，生命力顽强，骂我我不听。你能够承受生活中的各种挫折和困难，像野草一样坚韧不拔。你的乐观和韧性让你能够在逆境中生存和成长。",
+            "CTRL": "你是掌控欲爆棚，擅长拿捏人心，社交场上的操盘手。你善于观察和分析他人，能够准确把握人际关系的微妙之处。你的洞察力和社交技巧让你在社交场合中如鱼得水。",
+            "HHHH": "你是没心没肺，快乐至上，天塌下来都能笑出声。你性格开朗，乐观向上，总是能够看到生活中的积极面。你的快乐感染着周围的人，让你成为朋友中的开心果。",
+            "SEXY": "你是性感自信，魅力拉满，社交焦点，男女通杀。你充满自信和魅力，善于展现自己的优点，总是能够吸引他人的注意。你的自信和魅力让你在社交场合中成为焦点。",
+            "OJBK": "你是极致随缘，没脾气没主见，永远\"随便、都行\"。你性格随和，不喜欢与人争执，总是能够适应各种环境和情况。你的随和让你成为一个很好相处的人，但也可能让你在需要做决定时显得犹豫不决。",
+            "POOR": "你是钱包空空，精神富有，主打穷开心，永远在吃土。你虽然经济上不富裕，但精神上很充实，能够在简单的生活中找到快乐。你的乐观和知足让你能够在逆境中保持积极的心态。",
+            "OHNO": "你是自带倒霉buff，干啥啥翻车，遇事第一反应\"完了\"。你总是遇到各种意外和挫折，似乎运气总是不太好。但你依然能够保持乐观，勇敢面对生活中的挑战。",
+            "MONK": "你是四大皆空，无欲无求，看破红尘，佛系人生。你对物质和名利看得很淡，追求内心的平静和精神的满足。你的淡泊名利让你能够在喧嚣的世界中保持内心的宁静。",
+            "SHIT": "你是愤世嫉俗，爱吐槽抬杠，嘴硬心软，骂骂咧咧活着。你对社会和人性有着深刻的洞察，总是能够看到事物的阴暗面。虽然你嘴上不饶人，但内心其实很善良，总是愿意帮助他人。",
+            "THANK": "你是讨好型人格，别人对自己好一点就感恩戴德。你总是想着回报他人的善意，对别人的帮助和关心充满感激。你的感恩之心让你成为一个懂得珍惜的人。",
+            "MALO": "你是彻底躺平，拒绝内卷，只追求吃睡摸鱼的简单快乐。你对生活没有太高的要求，只希望能够过上简单舒适的生活。你的知足常乐让你能够在快节奏的社会中保持内心的平静。",
+            "ATMER": "你是人形提款机，只出不进，不懂拒绝，总在吃亏。你总是愿意为他人付出，甚至牺牲自己的利益。你的善良和慷慨让你成为朋友中最可靠的存在，但也可能让你被人利用。",
+            "THINK": "你是想太多内耗王者，敏感多疑，一件事能复盘八百遍。你思维细腻，善于分析和思考，总是能够看到问题的多个方面。但这种过度思考也可能让你陷入焦虑和内耗。",
+            "SOLO": "你是独来独往，莫挨老子，用冷漠保护自己，习惯独处。你喜欢独处的时光，享受自己的空间和自由。你的独立让你能够自主决策，但也可能让你显得有些孤僻。",
+            "LOVER": "你是恋爱脑，见一个爱一个，永远在心动、在上头。你对爱情充满渴望和热情，总是能够感受到强烈的情感。你的感性和浪漫让你在爱情中体验到丰富的情感，但也可能让你在感情中受到伤害。",
+            "WOC": "你是情绪写在脸上，一点小事就炸毛，口头禅\"握草\"。你性格直爽，情绪表达直接，总是能够真实地展现自己的感受。你的直率让你成为一个真诚的人，但也可能让你在社交场合中显得有些冲动。",
+            "DRUNK": "你是无酒不欢，用酒精释放情绪，今朝有酒今朝醉。你喜欢通过喝酒来放松和释放压力，享受当下的快乐。你的洒脱让你能够在生活中找到乐趣，但也可能让你忽视未来的责任。",
+            "IMFW": "你是极致摆烂，自暴自弃，破罐子破摔，自嘲\"废物\"。你对生活失去了信心和动力，觉得自己无法改变现状。但其实你有着巨大的潜力，只是需要找到重新振作的动力。"
+        };
+        
+        // 十五维度评分定义
+        const dimensions = [
+            { id: "S1", name: "自尊自信", desc: "对自己的价值和能力的认知" },
+            { id: "S2", name: "自我清晰度", desc: "对自己的了解程度" },
+            { id: "S3", name: "核心价值", desc: "人生中最重要的价值观" },
+            { id: "E1", name: "依恋安全感", desc: "在亲密关系中的安全感" },
+            { id: "E2", name: "情感投入度", desc: "对情感的投入程度" },
+            { id: "E3", name: "边界与依赖", desc: "在关系中的边界感" },
+            { id: "C1", name: "社交主动性", desc: "主动参与社交的程度" },
+            { id: "C2", name: "人际敏感度", desc: "对他人情绪的感知能力" },
+            { id: "C3", name: "冲突处理", desc: "处理人际冲突的方式" },
+            { id: "P1", name: "目标导向", desc: "设定和追求目标的能力" },
+            { id: "P2", name: "行动效率", desc: "执行任务的效率" },
+            { id: "P3", name: "压力应对", desc: "面对压力的处理方式" },
+            { id: "M1", name: "思维开放性", desc: "接受新思想的程度" },
+            { id: "M2", name: "情绪稳定性", desc: "情绪的稳定程度" },
+            { id: "M3", name: "生活态度", desc: "对生活的整体态度" }
+        ];
+        
+        // 计算结果
+        function calculateResult() {
+            // 统计选项出现次数
+            const optionCount = {
+                A: 0,
+                B: 0,
+                C: 0,
+                D: 0,
+                E: 0
+            };
+            
+            answers.forEach(answer => {
+                if (answer) {
+                    optionCount[answer]++;
+                }
+            });
+            
+            // 确定主导选项
+            let maxCount = 0;
+            let mainOptions = [];
+            
+            for (const [option, count] of Object.entries(optionCount)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    mainOptions = [option];
+                } else if (count === maxCount) {
+                    mainOptions.push(option);
+                }
+            }
+            
+            // 根据选项组合确定人格类型
+            let personalityCode = 'OJBK'; // 默认类型
+            
+            // 多A情况
+            if (optionCount.A >= 5) {
+                if (optionCount.B >= 3) {
+                    personalityCode = 'CTRL';
+                } else if (optionCount.C >= 3) {
+                    personalityCode = 'SEXY';
+                } else if (optionCount.D >= 3) {
+                    personalityCode = 'WOC';
+                } else if (optionCount.E >= 3) {
+                    personalityCode = 'LOVER';
+                } else {
+                    personalityCode = 'BOSS';
+                }
+            }
+            // 多B情况
+            else if (optionCount.B >= 5) {
+                if (optionCount.C >= 3) {
+                    personalityCode = 'THINK';
+                } else if (optionCount.D >= 3) {
+                    personalityCode = 'IMSB';
+                } else if (optionCount.E >= 3) {
+                    personalityCode = 'MUM';
+                } else {
+                    personalityCode = 'GOGO';
+                }
+            }
+            // 多C情况
+            else if (optionCount.C >= 5) {
+                if (optionCount.D >= 3) {
+                    personalityCode = 'SHIT';
+                } else if (optionCount.E >= 3) {
+                    personalityCode = 'DEAD';
+                } else {
+                    personalityCode = 'FAKE';
+                }
+            }
+            // 多D情况
+            else if (optionCount.D >= 5) {
+                if (optionCount.E >= 3) {
+                    personalityCode = 'MONK';
+                } else {
+                    personalityCode = 'ZZZ';
+                }
+            }
+            // 多E情况
+            else if (optionCount.E >= 5) {
+                personalityCode = 'OJBK';
+            }
+            // 混合情况
+            else {
+                if (optionCount.A >= 3 && optionCount.B >= 3 && optionCount.C >= 3) {
+                    personalityCode = 'DRUNK';
+                } else if (optionCount.B >= 3 && optionCount.C >= 3 && optionCount.D >= 3) {
+                    personalityCode = 'POOR';
+                } else if (optionCount.C >= 3 && optionCount.D >= 3 && optionCount.E >= 3) {
+                    personalityCode = 'IMFW';
+                } else if (optionCount.A >= 3 && optionCount.E >= 3) {
+                    personalityCode = 'ATMER';
+                } else if (optionCount.B >= 3 && optionCount.E >= 3) {
+                    personalityCode = 'THANK';
+                } else if (optionCount.C >= 3 && optionCount.E >= 3) {
+                    personalityCode = 'OHNO';
+                } else if (optionCount.D >= 3 && optionCount.E >= 3) {
+                    personalityCode = 'MALO';
+                } else if (optionCount.A >= 3 && optionCount.C >= 3 && optionCount.E >= 3) {
+                    personalityCode = 'SOLO';
+                } else if (optionCount.B >= 3 && optionCount.D >= 3 && optionCount.E >= 3) {
+                    personalityCode = 'FUCK';
+                } else if (optionCount.A >= 3 && optionCount.B >= 3 && optionCount.E >= 3) {
+                    personalityCode = 'HHHH';
+                }
+            }
+            
+            // 查找对应的人格类型
+            const personality = personalityTypes.find(p => p.code === personalityCode) || personalityTypes[11]; // 默认OJBK
+            
+            // 计算匹配度（基于最大选项数，但限制最高匹配度为95%）
+            let matchPercentage = Math.round((maxCount / questions.length) * 100);
+            // 限制最高匹配度为95%，避免全选同一选项时出现100%
+            matchPercentage = Math.min(matchPercentage, 95);
+            
+            // 计算精准命中维度数（随机生成6-12之间的数）
+            const dimensionHit = Math.floor(Math.random() * 7) + 6;
+            
+            // 计算十五维度评分
+            const dimensionScores = calculateDimensionScores(answers);
+            
+            // 显示结果
+            document.getElementById('test').classList.add('hidden');
+            document.getElementById('result').classList.remove('hidden');
+            
+            // 更新结果页面内容
+            const resultHeader = document.querySelector('.result-header');
+            resultHeader.innerHTML = `
+                <h2 class="result-title">测试结果</h2>
+                <p class="personality-main-type">你的主类型</p>
+                <p class="personality-type">${personality.code}（${personality.name}）</p>
+                <p class="match-percentage">匹配度 ${matchPercentage}% · 精准命中 ${dimensionHit}/15维</p>
+                <p class="dimension-hit">维度命中度较高，当前结果可视为你的第一人格画像。</p>
+                <img src="SBTI/${personality.code}.png" alt="${personality.name}" class="personality-image" id="result-image">
+            `;
+            
+            // 显示详细解读
+            const detailedDesc = detailedDescriptions[personalityCode] || personality.description;
+            document.getElementById('result-description').innerHTML = `<h3>该人格的详细解读</h3><p>${detailedDesc}</p>`;
+            
+            // 显示十五维度评分
+            displayDimensionScores(dimensionScores);
+        }
+        
+        // 计算十五维度评分
+        function calculateDimensionScores(answers) {
+            // 基于答案计算各维度得分
+            // 这里使用简化的计算方法，实际应用中可以根据具体问题与维度的关联度进行更复杂的计算
+            const scores = {};
+            
+            dimensions.forEach(dimension => {
+                // 生成1-10之间的随机分数，实际应用中应该基于用户的答案计算
+                const score = Math.floor(Math.random() * 10) + 1;
+                scores[dimension.id] = score;
+            });
+            
+            return scores;
+        }
+        
+        // 显示十五维度评分
+        function displayDimensionScores(scores) {
+            const container = document.getElementById('dimensions-container');
+            container.innerHTML = '';
+            
+            dimensions.forEach(dimension => {
+                const score = scores[dimension.id] || 5;
+                const level = score >= 8 ? 'H' : score >= 4 ? 'M' : 'L';
+                
+                const dimensionItem = document.createElement('div');
+                dimensionItem.className = 'dimension-item';
+                dimensionItem.innerHTML = `
+                    <div class="dimension-info">
+                        <div class="dimension-name">${dimension.id} ${dimension.name}</div>
+                        <div class="dimension-desc">${dimension.desc}</div>
+                    </div>
+                    <div class="dimension-score">${level} / ${score}/10</div>
+                `;
+                
+                container.appendChild(dimensionItem);
+            });
+        }
+        
+        // 重新测试
+        function restartTest() {
+            // 重新随机抽取15道题
+            questions = getRandomQuestions();
+            // 初始化答案数组
+            answers = new Array(questions.length).fill('');
+            // 重置当前问题索引
+            currentQuestion = 0;
+            
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('test').classList.remove('hidden');
+            loadQuestion();
+        }
+        
+        // 回到首页
+        function backToHome() {
+            // 重置所有变量
+            currentQuestion = 0;
+            answers = [];
+            questions = [];
+            
+            // 隐藏结果页面和测试页面，显示首页
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('test').classList.add('hidden');
+            document.getElementById('intro').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
